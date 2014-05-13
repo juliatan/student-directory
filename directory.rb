@@ -30,6 +30,6 @@ students.each do |student|
 end
 
 # finally we print the total
-print "Overall, we have #{students.length} great students"
+puts "Overall, we have #{students.length} great students"
 
 
