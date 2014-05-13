@@ -35,4 +35,4 @@ puts students[7]
 puts students[8]
 
 # finally we print the total
-print "Overall, we have #{student.length} great students"
+print "Overall, we have #{students.length} great students"
