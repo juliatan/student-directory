@@ -22,43 +22,40 @@ students = [
 	{name: "Fitsum Teklehaimanot", cohort: :may}
 ]
 =end
+
+# define a variable accessible to all methods
 @students = []
 
 def interactive_menu
+	# 4. repeat from step 1
 	loop do
 		# 1. print the menu and ask the user what to do
 		print_menu
 		# 2. read the input and save it to a variable
 		input = gets.chomp
-
-		# 3. do what the user has asked
-		case input
-		when "1"
-			 input_students 
-		when "2"
-			show_students
-		when "9"
-			exit #this will cause the program to terminate
-		else
-			puts "I don't know what you meant, try again"
-		end
-
+		process(input)
 	end
 end
-	# 4. repeat from step 1
+
+		# 3. do what the user has asked
+def process(selection)
+	case selection
+	when "1"
+		 input_students 
+	when "2"
+		show_students
+	when "9"
+		exit #this will cause the program to terminate
+	else
+		puts "I don't know what you meant, try again"
+	end
+end
 
 def print_menu
 	puts "1. Input the students"
 	puts "2. Show the students"
 	puts "9. Exit"
 end
-
-def show_students
-	print_header
-	print
-	print_footer
-end
-
 
 # Option 1
 def input_students
@@ -74,6 +71,12 @@ def input_students
 end
 
 # Option 2
+
+def show_students
+	print_header
+	print
+	print_footer
+end
 
 def print_header
 	puts "The students of my cohort at Makers Academy"
