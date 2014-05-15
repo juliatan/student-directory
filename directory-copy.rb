@@ -23,9 +23,10 @@ students = [
 ]
 =end
 
-# define a variable accessible to all methods
+
 require 'date'
 
+# define a variable accessible to all methods
 @students = []
 
 def interactive_menu
@@ -34,7 +35,7 @@ def interactive_menu
 		# 1. print the menu and ask the user what to do
 		print_menu
 		# 2. read the input and save it to a variable
-		process(gets.chomp)
+		process(gets.chomp) # can replace with process(gets.gsub("\n", ""))
 	end
 end
 
@@ -49,7 +50,12 @@ def process(selection)
 		@students.each do |student|
 			@cohort_months.push student[:cohort]
 		end
-		show_students
+
+		if @students.length == 0
+			puts "You haven't entered anything!"
+		else
+			show_students	
+		end
 
 	when "3"
 		save_students
@@ -90,15 +96,6 @@ def input_students
 
 		@students << {name: name, cohort: cohort}
 
-		# @students.keep_if { |hash| 
-	 #      hash[:name][0] === "A"
-	 #    }
-
-	    # @students.keep_if { |hash| 
-	    #   hash[:name].length < 12
-	    # }
-
-
 	 	puts "Now we have #{@students.length} #{pluralisation}\nAny more students?\n"
 
 		name = gets.chomp
@@ -111,7 +108,6 @@ def input_students
 end
 
 # Option 2
-
 def show_students
 	print_header
 	print_students_list
@@ -126,9 +122,7 @@ def pluralisation
 	end
 end
 
-
 def print_header
-
 	puts "The #{pluralisation} of my cohort at Makers Academy"
 	puts "-----------------------------"
 end
@@ -140,7 +134,7 @@ end
 # 	end
 # end
 
-# code for printing using while
+# code for printing using while loop
 # def print
 # 	i = 0
 # 	while i < @students.length
@@ -149,15 +143,15 @@ end
 # 	end
 # end
 
-# code for printing using until
-
-
-def print_students_list
+# code for printing using until loop
+	# def print_students_list
 	# i = 0
 	# until i == @students.length
 	# 	puts "#{i+1}. #{@students[i][:name]} (#{@students[i][:cohort]} cohort) ** Hobbies: #{@students[i][:hobbies]}, Country of Birth: #{@students[i][:country]}, Height: #{@students[i][:height]}".center(150) 
 	# 	i += 1
 	# end	
+	
+def print_students_list
 	@cohort_months.uniq.each do | month |
 		cohort_choice(@students, month)
 	end
@@ -171,22 +165,12 @@ def cohort_choice(students, month)
 		puts "#{index+1}. - #{student[:name]} in #{student[:cohort]}"
 	end
 end
-	# students.map do |student|
-
-	# 	i = 0
-	# 	until i == students.length
-	# 		puts "#{i+1}. #{student}" if student[:cohort] == month
-	# 		i += 1
-	# 	end
-	# end
-
 
 def print_footer
 	puts "\nOverall, we have #{@students.length} great #{pluralisation}\n"
 end
 
 # define save methodology
-
 def save_students
 	# open the file for writing
 	file = File.open("students.csv", "w")
@@ -199,6 +183,7 @@ def save_students
 	file.close
 end
 
+# define load methodology
 def load_students
 	file = File.open("students.csv", "r")
 	file.readlines.each do |line|
@@ -208,6 +193,5 @@ def load_students
 	file.close
 	puts "It's been loaded"
 end
-
 
 interactive_menu
