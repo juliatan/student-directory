@@ -44,7 +44,13 @@ def process(selection)
 	when "1"
 		 input_students 
 	when "2"
+		
+		@cohort_months = []
+		@students.each do |student|
+			@cohort_months.push student[:cohort]
+		end
 		show_students
+
 	when "3"
 		save_students
 	when "4"
@@ -70,15 +76,6 @@ def input_students
 	puts "To finish, just hit return twice"
 	name = gets.chomp
 
-	puts "What are this person's hobbies?"
-	hobbies = gets.chomp
-	
-	puts "Where is this person from?"
-	country = gets.chomp
-
-	puts "What is this person's height?"
-	height = gets.chomp
-
 	while !name.empty? do 
 
 		puts "Which cohort do they belong to?"
@@ -91,7 +88,7 @@ def input_students
 		cohort = :May if cohort == ""
 		cohort = cohort.to_sym
 
-		@students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height}
+		@students << {name: name, cohort: cohort}
 
 		# @students.keep_if { |hash| 
 	 #      hash[:name][0] === "A"
@@ -101,23 +98,15 @@ def input_students
 	    #   hash[:name].length < 12
 	    # }
 
-		puts "Now we have #{@students.length} students\nAny more students?\n"
+
+	 	puts "Now we have #{@students.length} #{pluralisation}\nAny more students?\n"
 
 		name = gets.chomp
 
-		if !name.empty?
-			puts "Which cohort do they belong to?"
-			cohort = gets.chomp
-
-			puts "What are this person's hobbies?"
-			hobbies = gets.chomp
-		
-			puts "Where is this person from?"
-			country = gets.chomp
-
-			puts "What is this person's height?"
-			height = gets.chomp
-		end
+		# if !name.empty?
+		# 	puts "Which cohort do they belong to?"
+		# 	cohort = gets.chomp
+		# end
 	end
 end
 
@@ -129,8 +118,18 @@ def show_students
 	print_footer
 end
 
+def pluralisation
+	if @students.length == 1
+		"student"
+	else
+		"students"
+	end
+end
+
+
 def print_header
-	puts "The students of my cohort at Makers Academy"
+
+	puts "The #{pluralisation} of my cohort at Makers Academy"
 	puts "-----------------------------"
 end
 
@@ -151,16 +150,39 @@ end
 # end
 
 # code for printing using until
+
+
 def print_students_list
-	i = 0
-	until i == @students.length
-		puts "#{i+1}. #{@students[i][:name]} (#{@students[i][:cohort]} cohort) ** Hobbies: #{@students[i][:hobbies]}, Country of Birth: #{@students[i][:country]}, Height: #{@students[i][:height]}".center(150) 
-		i += 1
+	# i = 0
+	# until i == @students.length
+	# 	puts "#{i+1}. #{@students[i][:name]} (#{@students[i][:cohort]} cohort) ** Hobbies: #{@students[i][:hobbies]}, Country of Birth: #{@students[i][:country]}, Height: #{@students[i][:height]}".center(150) 
+	# 	i += 1
+	# end	
+	@cohort_months.uniq.each do | month |
+		cohort_choice(@students, month)
 	end
 end
 
+def cohort_choice(students, month)
+	
+	by_cohort = students.select{|student| student[:cohort] == month}
+
+	by_cohort.each_with_index do |student, index|
+		puts "#{index+1}. - #{student[:name]} in #{student[:cohort]}"
+	end
+end
+	# students.map do |student|
+
+	# 	i = 0
+	# 	until i == students.length
+	# 		puts "#{i+1}. #{student}" if student[:cohort] == month
+	# 		i += 1
+	# 	end
+	# end
+
+
 def print_footer
-	puts "\nOverall, we have #{@students.length} great students\n"
+	puts "\nOverall, we have #{@students.length} great #{pluralisation}\n"
 end
 
 # define save methodology
