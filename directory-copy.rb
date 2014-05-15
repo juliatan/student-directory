@@ -24,6 +24,8 @@ students = [
 =end
 
 # define a variable accessible to all methods
+require 'date'
+
 @students = []
 
 def interactive_menu
@@ -78,7 +80,18 @@ def input_students
 	height = gets.chomp
 
 	while !name.empty? do 
-		@students << {name: name, cohort: :may, hobbies: hobbies, country: country, height: height}
+
+		puts "Which cohort do they belong to?"
+		cohort = gets.chomp
+		while !(Date::MONTHNAMES).include? cohort.capitalize do
+			puts "Did you get the month right? Reenter: "
+			cohort = gets.chomp
+		end
+
+		cohort = :May if cohort == ""
+		cohort = cohort.to_sym
+
+		@students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height}
 
 		# @students.keep_if { |hash| 
 	 #      hash[:name][0] === "A"
@@ -93,6 +106,9 @@ def input_students
 		name = gets.chomp
 
 		if !name.empty?
+			puts "Which cohort do they belong to?"
+			cohort = gets.chomp
+
 			puts "What are this person's hobbies?"
 			hobbies = gets.chomp
 		
@@ -170,5 +186,6 @@ def load_students
 	file.close
 	puts "It's been loaded"
 end
+
 
 interactive_menu
