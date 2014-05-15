@@ -34,6 +34,7 @@ def interactive_menu
 	loop do
 		# 1. print the menu and ask the user what to do
 		print_menu
+		puts "\n"
 		# 2. read the input and save it to a variable
 		process(STDIN.gets.chomp) # can replace with process(gets.gsub("\n", ""))
 	end
@@ -69,26 +70,27 @@ def process(selection)
 end
 
 def print_menu
-	puts "1. Input the students"
+	puts "\n1. Input the students"
 	puts "2. Show the students"
-	puts "3. Save the list to students.csv"
-	puts "4. Load the list from students.csv"
-	puts "9. Exit"
+	puts "3. Save the list to #{ARGV.first}"
+	puts "4. Load the list from #{ARGV.first}"
+	puts "9. Exit\n"
 end
 
 # Option 1
 def input_students
-	puts "Please enter the names of the students"
+	puts "\nPlease enter the names of the students"
 	puts "To finish, just hit return twice"
+	puts "\n"
 	name = STDIN.gets.chomp
 
 	while !name.empty? do 
 
 		puts "Which cohort do they belong to?"
-		cohort = gets.chomp
+		cohort = STDIN.gets.chomp
 		while !(Date::MONTHNAMES).include? cohort.capitalize do
 			puts "Did you get the month right? Reenter: "
-			cohort = gets.chomp
+			cohort = STDIN.gets.chomp
 		end
 
 		cohort = :May if cohort == ""
@@ -123,7 +125,7 @@ def pluralisation
 end
 
 def print_header
-	puts "The #{pluralisation} at Makers Academy"
+	puts "\nThe #{pluralisation} at Makers Academy"
 	puts "-----------------------------"
 end
 
@@ -170,7 +172,7 @@ def cohort_choice(students, month)
 end
 
 def print_footer
-	puts "\nOverall, we have #{@students.length} great #{pluralisation}\n"
+	puts "Overall, we have #{@students.length} great #{pluralisation}\n"
 end
 
 # define save methodology
@@ -180,10 +182,11 @@ def save_students
 	# iterate over the array of students
 	@students.each do |student|
 		student_data = [student[:name], student[:cohort]]
-		csv_line = student_data.join(", ")
+		csv_line = student_data.join(",")
 		file.puts csv_line
 	end
 	file.close
+	puts "File saved"
 end
 
 # define load methodology
