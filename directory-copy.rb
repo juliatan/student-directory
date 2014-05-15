@@ -23,7 +23,7 @@ students = [
 ]
 =end
 
-
+# to check that cohort input is valid
 require 'date'
 
 # define a variable accessible to all methods
@@ -35,7 +35,7 @@ def interactive_menu
 		# 1. print the menu and ask the user what to do
 		print_menu
 		# 2. read the input and save it to a variable
-		process(gets.chomp) # can replace with process(gets.gsub("\n", ""))
+		process(STDIN.gets.chomp) # can replace with process(gets.gsub("\n", ""))
 	end
 end
 
@@ -80,7 +80,7 @@ end
 def input_students
 	puts "Please enter the names of the students"
 	puts "To finish, just hit return twice"
-	name = gets.chomp
+	name = STDIN.gets.chomp
 
 	while !name.empty? do 
 
@@ -98,7 +98,7 @@ def input_students
 
 	 	puts "Now we have #{@students.length} #{pluralisation}\nAny more students?\n"
 
-		name = gets.chomp
+		name = STDIN.gets.chomp
 
 		# if !name.empty?
 		# 	puts "Which cohort do they belong to?"
@@ -123,7 +123,7 @@ def pluralisation
 end
 
 def print_header
-	puts "The #{pluralisation} of my cohort at Makers Academy"
+	puts "The #{pluralisation} at Makers Academy"
 	puts "-----------------------------"
 end
 
@@ -154,15 +154,18 @@ end
 def print_students_list
 	@cohort_months.uniq.each do | month |
 		cohort_choice(@students, month)
+		puts "\n"
 	end
 end
 
 def cohort_choice(students, month)
 	
-	by_cohort = students.select{|student| student[:cohort] == month}
+	by_cohort = students.select { |student| 
+		student[:cohort] == month
+	}
 
 	by_cohort.each_with_index do |student, index|
-		puts "#{index+1}. - #{student[:name]} in #{student[:cohort]}"
+		puts "#{index + 1}. - #{student[:name]} in #{student[:cohort]}"
 	end
 end
 
@@ -184,8 +187,8 @@ def save_students
 end
 
 # define load methodology
-def load_students
-	file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+	file = File.open(filename, "r")
 	file.readlines.each do |line|
 		name, cohort = line.chomp.split(",")
 		@students << {name: name, cohort: cohort.to_sym}
@@ -194,4 +197,17 @@ def load_students
 	puts "It's been loaded"
 end
 
+def try_load_students
+	filename = ARGV.first #first argument from command line
+	return if filename.nil? #get out of the method if it isn't given
+	if File.exists?(filename) # if it exists
+		load_students(filename)
+		puts "Loaded #{@students.length} from #{filename}"
+	else
+		puts "Sorry, #{filename} doesn't exist."
+		exit
+	end
+end
+
+try_load_students
 interactive_menu
