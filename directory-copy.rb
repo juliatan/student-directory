@@ -30,17 +30,13 @@ require 'date'
 @students = []
 
 def interactive_menu
-	# 4. repeat from step 1
 	loop do
-		# 1. print the menu and ask the user what to do
 		print_menu
 		puts "\n"
-		# 2. read the input and save it to a variable
 		process(STDIN.gets.chomp) # can replace with process(gets.gsub("\n", ""))
 	end
 end
 
-		# 3. do what the user has asked
 def process(selection)
 	case selection
 	when "1"
@@ -94,9 +90,10 @@ def input_students
 		end
 
 		cohort = :May if cohort == ""
-		cohort = cohort.to_sym
+		# cohort = cohort.to_sym
 
-		@students << {name: name, cohort: cohort}
+		push_student(name, cohort)
+		# @students << {name: name, cohort: cohort}
 
 	 	puts "Now we have #{@students.length} #{pluralisation}\nAny more students?\n"
 
@@ -161,7 +158,6 @@ def print_students_list
 end
 
 def cohort_choice(students, month)
-	
 	by_cohort = students.select { |student| 
 		student[:cohort] == month
 	}
@@ -194,7 +190,8 @@ def load_students(filename = "students.csv")
 	file = File.open(filename, "r")
 	file.readlines.each do |line|
 		name, cohort = line.chomp.split(",")
-		@students << {name: name, cohort: cohort.to_sym}
+		push_student(name, cohort)
+		# @students << {name: name, cohort: cohort.to_sym}
 	end
 	file.close
 	puts "It's been loaded"
@@ -210,6 +207,10 @@ def try_load_students
 		puts "Sorry, #{filename} doesn't exist."
 		exit
 	end
+end
+
+def push_student(name, cohort)
+	@students << {name: name, cohort: cohort.to_sym}
 end
 
 try_load_students
