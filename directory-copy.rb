@@ -171,31 +171,51 @@ def print_footer
 	puts "Overall, we have #{@students.length} great #{pluralisation}\n"
 end
 
-# define save methodology
+# define save methodology - refectored to use code blocks
 def save_students
-	# open the file for writing
-	file = File.open("students.csv", "w")
-	# iterate over the array of students
+	File.open("students.csv", "w") #open the file for writing
 	@students.each do |student|
 		student_data = [student[:name], student[:cohort]]
 		csv_line = student_data.join(",")
-		file.puts csv_line
+		puts csv_line
 	end
-	file.close
 	puts "File saved"
 end
 
-# define load methodology
+# def save_students
+# 	# open the file for writing
+# 	file = File.open("students.csv", "w")
+# 	# iterate over the array of students
+# 	@students.each do |student|
+# 		student_data = [student[:name], student[:cohort]]
+# 		csv_line = student_data.join(",")
+# 		file.puts csv_line
+# 	end
+# 	file.close
+# 	puts "File saved"
+# end
+
+# define load methodology - refactored using code block
 def load_students(filename = "students.csv")
-	file = File.open(filename, "r")
-	file.readlines.each do |line|
-		name, cohort = line.chomp.split(",")
-		push_student(name, cohort)
-		# @students << {name: name, cohort: cohort.to_sym}
+	File.open(filename, "r") do |file|
+		file.readlines.each do |line|
+			name, cohort = line.chomp.split(",")
+			push_student(name, cohort)
+		end
 	end
-	file.close
 	puts "It's been loaded"
 end
+
+# def load_students(filename = "students.csv")
+# 	file = File.open(filename, "r")
+# 	file.readlines.each do |line|
+# 		name, cohort = line.chomp.split(",")
+# 		push_student(name, cohort)
+# 		# @students << {name: name, cohort: cohort.to_sym}
+# 	end
+# 	file.close
+# 	puts "It's been loaded"
+# end
 
 def try_load_students
 	filename = ARGV.first #first argument from command line
