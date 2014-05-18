@@ -26,6 +26,9 @@ students = [
 # to check that cohort input is valid
 require 'date'
 
+# for working with CSV files
+require 'csv'
+
 # define a variable accessible to all methods
 @students = []
 
@@ -68,8 +71,8 @@ end
 def print_menu
 	puts "\n1. Input the students"
 	puts "2. Show the students"
-	puts "3. Save the list to #{ARGV.first}"
-	puts "4. Load the list from #{ARGV.first}"
+	puts "3. Save the list to a filename of your choice"
+	puts "4. Load the list from a filename of your choice"
 	puts "9. Exit\n"
 end
 
@@ -171,16 +174,27 @@ def print_footer
 	puts "Overall, we have #{@students.length} great #{pluralisation}\n"
 end
 
-# define save methodology - refectored to use code blocks
+#define save methodology using CSV
 def save_students
-	File.open("students.csv", "w") #open the file for writing
-	@students.each do |student|
-		student_data = [student[:name], student[:cohort]]
-		csv_line = student_data.join(",")
-		puts csv_line
+	CSV.open("students.csv", "w") do |line|
+		@students.each do |student|
+			line << [student[:name], student[:cohort]]
+		end
 	end
-	puts "File saved"
+	puts "File saved. What's next?"
 end
+
+
+# define save methodology - refectored to use code blocks
+# def save_students
+# 	File.open("students.csv", "w") #open the file for writing
+# 	@students.each do |student|
+# 		student_data = [student[:name], student[:cohort]]
+# 		csv_line = student_data.join(",")
+# 		puts csv_line
+# 	end
+# 	puts "File saved"
+# end
 
 # def save_students
 # 	# open the file for writing
@@ -195,16 +209,26 @@ end
 # 	puts "File saved"
 # end
 
-# define load methodology - refactored using code block
+#define load methodology using CSV library
 def load_students(filename = "students.csv")
-	File.open(filename, "r") do |file|
-		file.readlines.each do |line|
-			name, cohort = line.chomp.split(",")
-			push_student(name, cohort)
-		end
+	CSV.foreach(filename) do |line|
+		name, cohort = line[0], line[1]
+		push_student(name, cohort)
 	end
-	puts "It's been loaded"
+	puts "Your file has been loaded. Press 2 to view or choose another option."
 end
+
+
+# define load methodology - refactored using code block
+# def load_students(filename = "students.csv")
+# 	File.open(filename, "r") do |file|
+# 		file.readlines.each do |line|
+# 			name, cohort = line.chomp.split(",")
+# 			push_student(name, cohort)
+# 		end
+# 	end
+# 	puts "It's been loaded"
+# end
 
 # def load_students(filename = "students.csv")
 # 	file = File.open(filename, "r")
