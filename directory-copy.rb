@@ -58,9 +58,15 @@ def process(selection)
 		end
 
 	when "3"
+		print "What filename do you want to save to? "
+		@filename_save = STDIN.gets.chomp
 		save_students
+
 	when "4"
+		print "What filename do you want to load? "
+		@filename_load = STDIN.gets.chomp
 		load_students
+
 	when "9"
 		exit #this will cause the program to terminate
 	else
@@ -176,7 +182,7 @@ end
 
 #define save methodology using CSV
 def save_students
-	CSV.open("students.csv", "w") do |line|
+	CSV.open(@filename_save, "w") do |line|
 		@students.each do |student|
 			line << [student[:name], student[:cohort]]
 		end
@@ -210,7 +216,8 @@ end
 # end
 
 #define load methodology using CSV library
-def load_students(filename = "students.csv")
+def load_students(filename = @filename_load)
+	@students.clear
 	CSV.foreach(filename) do |line|
 		name, cohort = line[0], line[1]
 		push_student(name, cohort)
