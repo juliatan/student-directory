@@ -11,6 +11,13 @@ Directory structure
 * students.csv => first example file filled with first set of student data
 * students-f1.csv => second example file filled with second set of student data
 
+Technologies used
+-----------------
+
+* Ruby
+* Command Line
+* Git
+
 How to use
 ----------
 
